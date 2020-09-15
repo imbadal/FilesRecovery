@@ -15,6 +15,9 @@ import com.example.imagerecover.model.ImageDataModel;
 import java.io.File;
 import java.util.ArrayList;
 
+import static com.example.imagerecover.config.Config.FILE_TYPE_IMAGE;
+import static com.example.imagerecover.config.Config.FILE_TYPE_VIDEO;
+
 public class ScannerAsyncTask extends AsyncTask<String, Integer, ArrayList<ImageDataModel>> {
 
     private static final String TAG = "ScannerAsyncTask_";
@@ -37,22 +40,18 @@ public class ScannerAsyncTask extends AsyncTask<String, Integer, ArrayList<Image
     @Override
     protected ArrayList<ImageDataModel> doInBackground(String... strings) {
 
-        String strArr;
-        if (strings[0].equalsIgnoreCase("all")) {
-            //if all then scan for complete internal and external storage
-            strArr = Environment.getExternalStorageDirectory().getAbsolutePath();
+        String dirPath;
+        String fileType = strings[0];
+
+        if (fileType.equalsIgnoreCase(FILE_TYPE_IMAGE) || fileType.equalsIgnoreCase(FILE_TYPE_VIDEO)) {
+            dirPath = Environment.getExternalStorageDirectory().getAbsolutePath();
         } else {
-            //otherwise only scan items in "RestoredPics" folder (app folder).
-            strArr = Environment.getExternalStorageDirectory().getAbsolutePath() + "/RestoredPhotos";
+            dirPath = Environment.getExternalStorageDirectory().getAbsolutePath() + "/RestoredMedia";
         }
 
-        StringBuilder stringBuilder = new StringBuilder();
-        stringBuilder.append("root = ");
-        stringBuilder.append(strArr);
+        Log.d(TAG, "doInBackground: path: " + dirPath);
 
-        Log.d(TAG, "doInBackground: path: " + strArr);
-
-        checkFileOfDirectory(getFileList(strArr));
+        checkFileOfDirectory(getFileList(dirPath), fileType);
         return this.alImageData;
 
     }
@@ -81,7 +80,7 @@ public class ScannerAsyncTask extends AsyncTask<String, Integer, ArrayList<Image
         super.onPostExecute(arrayList);
     }
 
-    public void checkFileOfDirectory(File[] fileArr) {
+    public void checkFileOfDirectory(File[] fileArr, String fileType) {
 
         for (int i = 0; i < fileArr.length; i++) {
             Integer[] numArr = new Integer[1];
@@ -90,24 +89,47 @@ public class ScannerAsyncTask extends AsyncTask<String, Integer, ArrayList<Image
             numArr[0] = i2;
             publishProgress(numArr);
             if (fileArr[i].isDirectory()) {
-                checkFileOfDirectory(getFileList(fileArr[i].getPath()));
+                checkFileOfDirectory(getFileList(fileArr[i].getPath()), fileType);
             } else {
                 BitmapFactory.Options options = new BitmapFactory.Options();
                 options.inJustDecodeBounds = true;
                 BitmapFactory.decodeFile(fileArr[i].getPath(), options);
                 if (!(options.outWidth == -1 || options.outHeight == -1)) {
-                    if (fileArr[i].getPath().endsWith(".exo") || fileArr[i].getPath().endsWith(".mp3") || fileArr[i].getPath().endsWith(".mp4")
+
+                    Log.d(TAG, "checkFileOfDirectory: " + fileArr[i].getPath());
+
+                    if (fileArr[i].getPath().endsWith(".exo") || fileArr[i].getPath().endsWith(".mp3")
                             || fileArr[i].getPath().endsWith(".pdf") || fileArr[i].getPath().endsWith(".apk") || fileArr[i].getPath().endsWith(".txt")
                             || fileArr[i].getPath().endsWith(".doc") || fileArr[i].getPath().endsWith(".exi") || fileArr[i].getPath().endsWith(".dat")
-                            || fileArr[i].getPath().endsWith(".m4a") || fileArr[i].getPath().endsWith(".json") || fileArr[i].getPath().endsWith(".chck")) {
+                            || fileArr[i].getPath().endsWith(".json") || fileArr[i].getPath().endsWith(".chck")) {
                         //do nothing, just skip these files
                     } else if (fileArr[i].getPath().endsWith(".jpg") || fileArr[i].getPath().endsWith(".png") || fileArr[i].getPath().endsWith(".gif")
-                            || fileArr[i].getPath().endsWith(".raw") || fileArr[i].getPath().endsWith(".tiff")) {
+                            || fileArr[i].getPath().endsWith(".raw") || fileArr[i].getPath().endsWith(".tiff") || fileArr[i].getPath().endsWith(".webp")) {
+
+                        /**TODO
+                         * add more image extension
+                         */
+
                         //image  files
-                        this.alImageData.add(new ImageDataModel(fileArr[i].getPath(), false));
+                        if (fileType.equalsIgnoreCase(FILE_TYPE_IMAGE))
+                            this.alImageData.add(new ImageDataModel(fileArr[i].getPath(), false));
+
+                    } else if (fileArr[i].getPath().endsWith(".webm") || fileArr[i].getPath().endsWith(".flv") || fileArr[i].getPath().endsWith(".gif")
+                            || fileArr[i].getPath().endsWith(".vob") || fileArr[i].getPath().endsWith(".mp4") || fileArr[i].getPath().endsWith(".m4p")
+                            || fileArr[i].getPath().endsWith(".3gp")) {
+
+                        /**TODO
+                         * add more video extension
+                         */
+
+                        //video  files
+                        if (fileType.equalsIgnoreCase(FILE_TYPE_VIDEO))
+                            this.alImageData.add(new ImageDataModel(fileArr[i].getPath(), false));
+
                     } else {
                         //do nothing, just skip these files
                     }
+
                 }
             }
         }

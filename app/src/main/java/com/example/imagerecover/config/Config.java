@@ -23,4 +23,7 @@ public class Config {
 
 
     public static final String APP_PREFERENCE = "appPreference";
+    public static final String FILE_TYPE = "file_type";
+    public static final String FILE_TYPE_IMAGE = "image";
+    public static final String FILE_TYPE_VIDEO = "video";
 }

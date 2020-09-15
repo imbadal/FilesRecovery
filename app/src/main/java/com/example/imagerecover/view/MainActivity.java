@@ -5,18 +5,20 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.View;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.imagerecover.R;
 
 import static com.example.imagerecover.config.Config.APP_PREFERENCE;
+import static com.example.imagerecover.config.Config.FILE_TYPE;
+import static com.example.imagerecover.config.Config.FILE_TYPE_IMAGE;
+import static com.example.imagerecover.config.Config.FILE_TYPE_VIDEO;
 
 public class MainActivity extends AppCompatActivity {
 
     Context context;
-    TextView tvRecovery;
+    TextView tvRecoveryImage;
+    TextView tvRecoveryVideo;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,13 +30,19 @@ public class MainActivity extends AppCompatActivity {
         getSharedPreferences(APP_PREFERENCE, MODE_PRIVATE).edit()
                 .putBoolean("isFirstOpen", false).apply();
 
-        tvRecovery = findViewById(R.id.tv_recovery);
+        tvRecoveryImage = findViewById(R.id.tv_recovery_image);
+        tvRecoveryVideo = findViewById(R.id.tv_recovery_video);
 
-        tvRecovery.setOnClickListener(v -> {
-//            Toast.makeText(context, "Scanning...", Toast.LENGTH_SHORT).show();
-//            startActivity(new Intent(context, ScannerActivity.class));
-            startActivity(new Intent(context, MediaScannerActivity.class));
+        tvRecoveryImage.setOnClickListener(v -> {
+            Intent intent = new Intent(context, MediaScannerActivity.class);
+            intent.putExtra(FILE_TYPE, FILE_TYPE_IMAGE);
+            startActivity(intent);
+        });
 
+        tvRecoveryVideo.setOnClickListener(v -> {
+            Intent intent = new Intent(context, MediaScannerActivity.class);
+            intent.putExtra("file_type", FILE_TYPE_VIDEO);
+            startActivity(intent);
         });
 
     }

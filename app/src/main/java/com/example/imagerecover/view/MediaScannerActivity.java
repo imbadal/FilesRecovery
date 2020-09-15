@@ -28,6 +28,8 @@ import java.util.ArrayList;
 import pl.bclogic.pulsator4droid.library.PulsatorLayout;
 
 import static com.example.imagerecover.config.Config.DATA;
+import static com.example.imagerecover.config.Config.FILE_TYPE;
+import static com.example.imagerecover.config.Config.FILE_TYPE_IMAGE;
 import static com.example.imagerecover.config.Config.REPAIR;
 import static com.example.imagerecover.config.Config.UPDATE;
 
@@ -42,6 +44,9 @@ public class MediaScannerActivity extends AppCompatActivity {
     private ArrayList<ImageDataModel> alImageData = new ArrayList();
 
     TextView tvCount;
+    BottomSheetDialog bottomSheetDialog;
+
+    String fileType = FILE_TYPE_IMAGE;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,16 +58,24 @@ public class MediaScannerActivity extends AppCompatActivity {
         window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
         window.setStatusBarColor(Color.BLACK);
 
+        getIntentData();
         initScanUi();
         initBottomSheetDialog();
         initAsync();
 
+    }
+
+    private void getIntentData() {
+
+        if (getIntent().hasExtra(FILE_TYPE)) {
+            fileType = getIntent().getStringExtra(FILE_TYPE);
+        }
 
     }
 
     private void initAsync() {
         myDataHandler = new MyDataHandler();
-        new ScannerAsyncTask(this, this.myDataHandler).execute("all");
+        new ScannerAsyncTask(this, this.myDataHandler).execute(fileType);
     }
 
     private void initScanUi() {
@@ -72,7 +85,7 @@ public class MediaScannerActivity extends AppCompatActivity {
 
     private void initBottomSheetDialog() {
 
-        BottomSheetDialog bottomSheetDialog = new BottomSheetDialog(context);
+        bottomSheetDialog = new BottomSheetDialog(context);
         bottomSheetDialog.setContentView(R.layout.layout_bottom_dialog_scan);
         bottomSheetDialog.setCanceledOnTouchOutside(false);
         bottomSheetDialog.setCancelable(false);
@@ -109,7 +122,6 @@ public class MediaScannerActivity extends AppCompatActivity {
 
     public class MyDataHandler extends Handler {
 
-
         public void handleMessage(Message message) {
             super.handleMessage(message);
             if (message.what == Config.DATA) {
@@ -134,6 +146,10 @@ public class MediaScannerActivity extends AppCompatActivity {
     }
 
     public void next() {
+
+        if (bottomSheetDialog != null) {
+            bottomSheetDialog.dismiss();
+        }
 
         PreRecoveryActivity.scannedImages = alImageData;
         Intent intent = new Intent(context, PreRecoveryActivity.class);
