@@ -18,7 +18,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:targetApi="q">
-        <activity android:name=".view.RecoveryActivity"></activity>
+        <activity android:name=".view.RecoveryActivity"/>
         <activity android:name=".view.PostRecoveryActivity" />
         <activity android:name=".view.PreRecoveryActivity" />
         <activity

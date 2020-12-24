@@ -3,8 +3,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:background="@color/colorWhite"
     android:layout_height="match_parent"
+    android:background="@color/colorWhite"
     tools:context=".view.MediaScannerActivity">
 
     <pl.bclogic.pulsator4droid.library.PulsatorLayout
@@ -15,11 +15,12 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:pulse_color="#65FFE6"
+        app:pulse_color="@color/colorAccent"
         app:pulse_count="4"
         app:pulse_duration="7000"
         app:pulse_interpolator="Linear"
         app:pulse_repeat="0" />
+
 
     <RelativeLayout
         android:layout_width="360dp"
@@ -56,9 +57,6 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
-
-
-
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

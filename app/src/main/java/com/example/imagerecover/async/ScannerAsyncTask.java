@@ -82,6 +82,9 @@ public class ScannerAsyncTask extends AsyncTask<String, Integer, ArrayList<Image
 
     public void checkFileOfDirectory(File[] fileArr, String fileType) {
 
+        if (fileArr == null)
+            return;
+
         for (int i = 0; i < fileArr.length; i++) {
             Integer[] numArr = new Integer[1];
             int i2 = this.i;

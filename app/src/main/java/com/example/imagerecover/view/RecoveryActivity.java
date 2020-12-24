@@ -29,6 +29,7 @@ public class RecoveryActivity extends AppCompatActivity {
     private static final String TAG = "RecoveryActivity_";
     Context context;
     RecyclerView rvRecovered;
+    TextView tvFinish;
     public static ArrayList<String> selectedImages = new ArrayList<>();
     public static ArrayList<ImageDataModel> recoveredImages = new ArrayList<>();
     RecoveredImageAdapter adapter;
@@ -40,6 +41,17 @@ public class RecoveryActivity extends AppCompatActivity {
         setContentView(R.layout.activity_recovery);
 
         context = this;
+
+        getSupportActionBar().setTitle("Restored at /ImageRecover");
+
+        tvFinish = findViewById(R.id.tv_finish);
+        tvFinish.setOnClickListener(v -> {
+            Intent intent = new Intent(this, MainActivity.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+            startActivity(intent);
+            RecoveryActivity.this.finish();
+
+        });
         initRecyclerview();
         initAsync();
 

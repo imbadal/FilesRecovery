@@ -16,7 +16,7 @@ public class Config {
         StringBuilder sbDirectory = new StringBuilder();
         sbDirectory.append(Environment.getExternalStorageDirectory());
         sbDirectory.append(File.separator);
-        sbDirectory.append("RecoverMedia_02");
+        sbDirectory.append("ImageRecover");
         IMAGE_RECOVER_DIRECTORY = sbDirectory.toString();
 
     }

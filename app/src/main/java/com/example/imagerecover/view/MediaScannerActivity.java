@@ -148,7 +148,11 @@ public class MediaScannerActivity extends AppCompatActivity {
     public void next() {
 
         if (bottomSheetDialog != null) {
-            bottomSheetDialog.dismiss();
+            try {
+                bottomSheetDialog.dismiss();
+            } catch (Exception e) {
+
+            }
         }
 
         PreRecoveryActivity.scannedImages = alImageData;

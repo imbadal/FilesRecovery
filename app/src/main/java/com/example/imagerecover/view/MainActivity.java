@@ -26,9 +26,8 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         context = this;
-
-        getSharedPreferences(APP_PREFERENCE, MODE_PRIVATE).edit()
-                .putBoolean("isFirstOpen", false).apply();
+        getSharedPreferences("prefs", MODE_PRIVATE).edit()
+                .putBoolean("firstOpen", false).apply();
 
         tvRecoveryImage = findViewById(R.id.tv_recovery_image);
         tvRecoveryVideo = findViewById(R.id.tv_recovery_video);

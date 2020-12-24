@@ -43,6 +43,8 @@ public class PreRecoveryActivity extends AppCompatActivity {
         tvProceed = findViewById(R.id.tv_proceed);
         initRecyclerview();
 
+        getSupportActionBar().setTitle("Select images to recover");
+
         tvProceed.setOnClickListener(v -> {
             if (selectedImages.size() == 0) {
                 Toast.makeText(context, "Please select at least one.", Toast.LENGTH_SHORT).show();
